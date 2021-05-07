@@ -1,0 +1,51 @@
+{
+  "name": "etl",
+  "version": "1.0.0",
+  "description": "a tApp that listens to a tweet stream and stores tweets in a Google Sheet",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "build:watch": "rimraf dist && tsc -w",
+    "lint": "eslint . --ext .ts,.js --fix",
+    "prepare": "rimraf dist && tsc",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "start": "tsc && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twitterdev/ETL.git"
+  },
+  "bugs": {
+    "url": "https://github.com/twitterdev/ETL/issues"
+  },
+  "homepage": "https://github.com/twitterdev/ETL#readme",
+  "author": "Nimo Naamani @duckranger",
+  "license": "Apache v2",
+  "keywords": [
+    "ETL",
+    "Google Sheets",
+    "Twitter",
+    "Twitter API",
+    "Twitter Stream"
+  ],
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "google-spreadsheet": "^3.1.15",
+    "needle": "^2.6.0",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/google-spreadsheet": "^3.1.1",
+    "@types/needle": "^2.5.1",
+    "@types/node": "^15.0.2",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
