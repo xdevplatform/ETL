@@ -7,9 +7,10 @@ Follow this [tutorial](https://developer.twitter.com/...)
 (TODO: @duckranger add details)
 1. Clone this repository
 1. Run `npm install` in the repo's directory
-1. Obtain a json file for Google API 
+1. Obtain a json key file for Google API (See https://www.fastcomet.com/tutorials/nodejs/google-spreadsheet-package) and place it inside the config directory
 1. Obtain a Twitter access token 
-1. Create a Google Spreadsheet and get its id 
+1. Create a Google Spreadsheet and get its id (The last part of the url: https://docs.google.com/spreadsheets/d/xxxxxxx)
+1. Make sure to share the sheet with `client_email` from within the Google json key file
 1. `npm start`
 
 

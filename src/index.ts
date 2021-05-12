@@ -11,7 +11,7 @@ if (!token) {
   )
 }
 
-const GOOGLE_CREDENTIALS = require('../config/client_secret.json')
+const GOOGLE_CREDENTIALS = require('../client_secret.json')
 const SEARCH_API_URL = 'https://api.twitter.com/2/tweets/search/stream'
 const RULES_API_URL = `${SEARCH_API_URL}/rules`
 const auth_headers = {
