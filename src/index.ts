@@ -12,27 +12,14 @@ if (!token) {
 }
 
 const GOOGLE_CREDENTIALS = require('../client_secret.json')
-const SEARCH_API_URL = 'https://api.twitter.com/2/tweets/search/stream'
-const RULES_API_URL = `${SEARCH_API_URL}/rules`
+const STREAM_API_URL = 'https://api.twitter.com/2/tweets/search/stream'
+const RULES_API_URL = `${STREAM_API_URL}/rules`
 const auth_headers = {
   headers: {
     Authorization: `Bearer ${token}`,
     'Content-type': 'application/json',
   },
   timeout: 20000,
-}
-
-async function getGoogleDoc() {
-  if (!process.env.TW_GOOGLE_DOC_ID) {
-    terminate(
-      'Config mismatch. Expecting TW_GOOGLE_DOC_ID environment variable to contain a Google Spreadsheet id. Found undefined',
-    )
-    return
-  }
-  const doc = new GoogleSpreadsheet(process.env.TW_GOOGLE_DOC_ID)
-  await doc.useServiceAccountAuth(GOOGLE_CREDENTIALS)
-  await doc.loadInfo()
-  return doc
 }
 
 // Sets up a rule based filter on the search endpoint.
@@ -65,6 +52,19 @@ async function setupRules() {
   })
 }
 
+async function getGoogleDoc() {
+  if (!process.env.TW_GOOGLE_DOC_ID) {
+    terminate(
+      'Config mismatch. Expecting TW_GOOGLE_DOC_ID environment variable to contain a Google Spreadsheet id. Found undefined',
+    )
+    return
+  }
+  const doc = new GoogleSpreadsheet(process.env.TW_GOOGLE_DOC_ID)
+  await doc.useServiceAccountAuth(GOOGLE_CREDENTIALS)
+  await doc.loadInfo()
+  return doc
+}
+
 // Transform a tweet's data from the stream into a Google Spreadsheet row
 // Add the transformed data as a new row in the sheet
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,7 +84,7 @@ function storeTweetInSheet(sheet: GoogleSpreadsheetWorksheet, data: any) {
 function handleTweets(sheet: GoogleSpreadsheetWorksheet) {
   // Open a stream with the tweet data we are interested in
   const extraFields = 'tweet.fields=created_at&expansions=author_id&user.fields=created_at'
-  const stream = needle.get(`${SEARCH_API_URL}?${extraFields}`, auth_headers)
+  const stream = needle.get(`${STREAM_API_URL}?${extraFields}`, auth_headers)
 
   // As tweets stream in - transform and store them
   stream
@@ -94,18 +94,6 @@ function handleTweets(sheet: GoogleSpreadsheetWorksheet) {
     })
   return stream
 }
-
-// Start the program
-(async () => {
-  await setupRules()
-  const doc = await getGoogleDoc()
-  if (!doc) {
-    terminate('Could not connect to Google Document')
-    return
-  }
-  const sheet = doc.sheetsByIndex[0]
-  handleTweets(sheet)
-})()
 
 // Helper function to print an error message and terminate
 function terminate(text: string) {
@@ -130,3 +118,15 @@ export type Rule = {
   id: string
   value: string
 }
+
+// Start the program
+(async () => {
+  await setupRules()
+  const doc = await getGoogleDoc()
+  if (!doc) {
+    terminate('Could not connect to Google Document')
+    return
+  }
+  const sheet = doc.sheetsByIndex[0]
+  handleTweets(sheet)
+})()
