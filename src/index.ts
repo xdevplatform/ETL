@@ -83,7 +83,7 @@ function storeTweetInSheet(sheet: GoogleSpreadsheetWorksheet, data: any) {
 // Listen to a stream of tweets from Twitter's API
 function handleTweets(sheet: GoogleSpreadsheetWorksheet) {
   // Open a stream with the tweet data we are interested in
-  const extraFields = 'tweet.fields=created_at&expansions=author_id&user.fields=created_at'
+  const extraFields = 'tweet.fields=created_at&expansions=author_id'
   const stream = needle.get(`${STREAM_API_URL}?${extraFields}`, auth_headers)
 
   // As tweets stream in - transform and store them
